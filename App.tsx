@@ -1,19 +1,31 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { supabase } from './supabaseClient';
 import LandingPage from './components/LandingPage';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
 import DeveloperDashboard from './components/DeveloperDashboard';
 import MerchantDashboard from './components/MerchantDashboard';
 import UserDashboard from './components/UserDashboard';
-import { Role, User, SiteConfig, RechargeCard, LandingService, Transaction, Notification, CustomPage, SalaryFinancing, FixedDeposit } from './types';
-
+import { Role, User, SiteConfig, RechargeCard, LandingService } from './types';
 const App: React.FC = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState('home');
-  
+  const handleSignUp = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  });
+
+  if (error) {
+    alert("خطأ في التسجيل: " + error.message);
+  } else {
+    alert("تم إنشاء الحساب بنجاح! افتح بريدك الالكتروني للتفعيل.");
+  }
+};
+
+
   const [siteConfig, setSiteConfig] = useState<SiteConfig>({
     logoUrl: 'https://filspay.com/assets/img/logo.png',
     networkBalance: 5000000, 
